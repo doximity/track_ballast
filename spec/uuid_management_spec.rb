@@ -11,13 +11,26 @@ RSpec.describe TrackBallast::UuidManagement do
     end
   end
 
+  class CreateNonNullableUuidModelsTable < ActiveRecord::Migration[7.1]
+    def change
+      create_table :non_nullable_uuid_models do |table|
+        table.string :uuid, null: false
+      end
+    end
+  end
+
   class UuidModel < ActiveRecord::Base
+    include TrackBallast::UuidManagement
+  end
+
+  class NonNullableUuidModel < ActiveRecord::Base
     include TrackBallast::UuidManagement
   end
 
   before do
     ActiveRecord::Migration.suppress_messages do
       CreateUuidModelsTable.migrate(:up)
+      CreateNonNullableUuidModelsTable.migrate(:up)
     end
   end
 
@@ -33,6 +46,13 @@ RSpec.describe TrackBallast::UuidManagement do
     model.valid?
 
     expect(model.uuid).to be
+  end
+
+  it "validates UUID presence when the column is not nullable" do
+    model = NonNullableUuidModel.create
+    model.uuid = nil
+
+    expect(model).not_to be_valid
   end
 
   it "does not validate uuid presence when the column is nullable" do
