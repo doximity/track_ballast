@@ -5,9 +5,6 @@ require "track_ballast"
 
 require "active_record"
 
-require "support/create_example_models_table"
-require "support/example_model"
-
 RSpec.configure do |config|
   # Enable flags like --only-failures and --next-failure
   config.example_status_persistence_file_path = ".rspec_status"
@@ -27,9 +24,5 @@ RSpec.configure do |config|
       adapter: "sqlite3",
       database: ":memory:" # https://www.sqlite.org/inmemorydb.html
     )
-
-    ActiveRecord::Migration.suppress_messages do
-      CreateExampleModelsTable.migrate(:up)
-    end
   end
 end
