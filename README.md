@@ -1,6 +1,6 @@
 # TrackBallast
 
-TrackBallast contains small supporting units of Ruby that we use with Rails.  It is named after [the small supporting stones that you see alongside railway tracks](https://www.scienceabc.com/pure-sciences/why-are-there-stones-train-ballast-alongside-railway-tracks.html).
+TrackBallast contains small supporting units of Ruby to use with Rails.  It is named after [the small supporting stones that you see alongside railway tracks](https://www.scienceabc.com/pure-sciences/why-are-there-stones-train-ballast-alongside-railway-tracks.html).
 
 None of these units are quite large enough to be a full Ruby gem on their own, but are yet highly reusable and useful in many Rails applications.
 
