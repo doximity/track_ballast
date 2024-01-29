@@ -1,15 +1,15 @@
 # TrackBallast
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/track_ballast`. To experiment with that code, run `bin/console` for an interactive prompt.
+TrackBallast contains small supporting units of Ruby that we use with Rails.  It is named after [the small supporting stones that you see alongside railway tracks](https://www.scienceabc.com/pure-sciences/why-are-there-stones-train-ballast-alongside-railway-tracks.html).
 
-TODO: Delete this and the text above, and describe your gem
+None of these units are quite large enough to be a full Ruby gem on their own, but are yet highly reusable and useful in many Rails applications.
 
 ## Installation
 
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'track_ballast'
+gem "track_ballast"
 ```
 
 And then execute:
@@ -22,7 +22,29 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+Please see the code and documentation for individual units.  Please `require` and use each unit directly.
+
+Examples:
+
+```ruby
+require "track_ballast/callable"
+
+class MyService
+  include TrackBallast::Callable
+end
+```
+
+```ruby
+require "track_ballast/uuid_management"
+
+class MyModel < ApplicationModel
+  include TrackBallast::UuidManagement
+end
+```
+
+## Roadmap
+
+Please see [the Milestones on GitHub](https://github.com/doximity/track_ballast/milestones?direction=asc&sort=title&state=open).
 
 ## Development
 
@@ -32,8 +54,13 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/track_ballast. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [Contributor Covenant](http://contributor-covenant.org) code of conduct.
+1. See [CONTRIBUTING.md](./CONTRIBUTING.md)
+2. Fork it ( https://github.com/doximity/track_ballast/fork )
+3. Create your feature branch (`git checkout -b my-new-feature`)
+4. Commit your changes (`git commit -am 'Add some feature'`)
+5. Push to the branch (`git push origin my-new-feature`)
+6. Create a new Pull Request
 
-## Code of Conduct
+## License
 
-Everyone interacting in the TrackBallast project’s codebases, issue trackers, chat rooms and mailing lists is expected to follow the [code of conduct](https://github.com/[USERNAME]/track_ballast/blob/master/CODE_OF_CONDUCT.md).
+`track_ballast` is licensed under an Apache 2 license. Contributors are required to sign a contributor license agreement. See LICENSE.txt and CONTRIBUTING.md for more information.
