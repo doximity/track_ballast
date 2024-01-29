@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require "securerandom"
+
 require "active_record"
 require "active_support"
 require "active_support/core_ext"
@@ -8,10 +10,14 @@ module TrackBallast
   module UuidManagement
     extend ActiveSupport::Concern
 
+    REGEXP_UUID_V4 = /^[0-9A-F]{8}-[0-9A-F]{4}-4[0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}$/i
+
     included do
       with_options if: :uuid_exists? do
+        after_initialize :uuid_generate, if: :new_record?
         before_validation :uuid_generate, on: :create
 
+        validate :v4_uuid, on: :create
         with_options unless: :uuid_nullable? do
           validates :uuid, presence: true, length: { is: 36 }
         end
@@ -19,6 +25,12 @@ module TrackBallast
     end
 
     private
+
+    def v4_uuid
+      return if uuid.match(REGEXP_UUID_V4)
+
+      errors.add :base, "Only V4 UUIDs are permitted"
+    end
 
     def uuid_exists?
       !uuid_column.nil?
@@ -33,7 +45,9 @@ module TrackBallast
     end
 
     def uuid_generate
-      self.uuid = SecureRandom.uuid if uuid.blank?
+      return unless try(:uuid).blank?
+
+      self.uuid = SecureRandom.uuid
     end
   end
 end
