@@ -1,5 +1,8 @@
 # frozen_string_literal: true
 
+require "active_support"
+require "active_support/core_ext"
+
 module TrackBallast
   # Module for building callable service classes where exactly one method will
   # ever be called and only the return value of that method matters, not the
@@ -26,10 +29,10 @@ module TrackBallast
   #     DivideByTwo.call(10) # => 5
   module Callable
     def call(*args, **kwargs, &block)
-      if kwargs&.empty?
-        new(*args).call(&block)
-      else
+      if kwargs.present?
         new(*args, **kwargs).call(&block)
+      else
+        new(*args).call(&block)
       end
     end
   end
