@@ -82,6 +82,14 @@ RSpec.describe TrackBallast::UuidManagement do
         expect(model.errors.full_messages).to eq(["Only V4 UUIDs are permitted"])
       end
 
+      it "logs the error" do
+        allow(TrackBallast.logger).to receive(:error)
+
+        UuidModel.create(uuid: v1_uuid)
+
+        expect(TrackBallast.logger).to have_received(:error).with(hash_including(class: "UuidModel", uuid: v1_uuid))
+      end
+
       it "raises validation error if object is newed up and then UUID set to v1" do
         model = UuidModel.new
         expect(model).to be_valid

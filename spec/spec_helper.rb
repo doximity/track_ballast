@@ -16,6 +16,10 @@ RSpec.configure do |config|
     c.syntax = :expect
   end
 
+  config.before :suite do
+    TrackBallast.logger = ActiveSupport::TaggedLogging.new(Logger.new(StringIO.new))
+  end
+
   config.before do
     # TODO: This may be unnecessary in some specs.  If that becomes a
     # noticeable slowdown, consider options to only set up ActiveRecord when

@@ -5,6 +5,7 @@ require "securerandom"
 require "active_record"
 require "active_support"
 require "active_support/core_ext"
+require "track_ballast/logger"
 
 module TrackBallast
   module UuidManagement
@@ -28,6 +29,10 @@ module TrackBallast
 
     def v4_uuid
       return if uuid.match(REGEXP_UUID_V4)
+
+      TrackBallast.logger.tagged("invalid-uuid") do |logger|
+        logger.error({ class: self.class.name, uuid: uuid, caller: caller.join("\n") })
+      end
 
       errors.add :base, "Only V4 UUIDs are permitted"
     end
