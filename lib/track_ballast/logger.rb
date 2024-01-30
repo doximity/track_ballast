@@ -11,10 +11,10 @@ module TrackBallast
     #
     # @!visibility private
     # @return [ActiveSupport::TaggedLogging] a tagged logger
-    attr_accessor :logger
-  end
-end
+    attr_writer :logger
 
-if defined?(Rails)
-  TrackBallast.logger = Rails.logger
+    def logger
+      @logger || defined?(Rails) && Rails.logger
+    end
+  end
 end
