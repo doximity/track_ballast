@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    track_ballast (0.1.0)
+    track_ballast (0.1.0.beta1)
       activerecord (>= 6.1, < 8.0)
       activesupport (>= 6.1, < 8.0)
 
