@@ -30,7 +30,13 @@ You may `require` the entirety of `track_ballast`:
 require "track_ballast/all"
 ```
 
-...or only require each desired unit:
+...or, in your `Gemfile`:
+
+```ruby
+gem "track_ballast", require: "track_ballast/all"
+```
+
+Alternatively, only require each desired unit:
 
 ```ruby
 require "track_ballast/callable"
