@@ -4,14 +4,20 @@ require "active_support"
 require "active_support/core_ext"
 
 module TrackBallast
-  # Module for building callable service classes where exactly one method will
-  # ever be called and only the return value of that method matters, not the
-  # class instance itself.
+  # A module for building callable service classes where exactly one method
+  # will ever be called and only the return value of that method matters, not
+  # the class instance itself.
   #
-  # Usage:
+  # == Usage
+  #
+  # - Define +initialize+ with the desired arguments
+  # - Define +call+ with the desired logic
+  # - Extend the class with this module
+  #
+  # == Example
   #
   #     class DivideByTwo
-  #       extend Callable
+  #       extend TrackBallast::Callable
   #
   #       def initialize(int)
   #         @int = int
