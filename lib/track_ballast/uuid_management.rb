@@ -45,7 +45,7 @@ module TrackBallast
   #
   # After adding the column, simply +include+ the module:
   #
-  #     class MyModel < ApplicationModel
+  #     class MyModel < ApplicationRecord
   #       include TrackBallast::UuidManagement
   #     end
   #

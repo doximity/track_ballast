@@ -43,7 +43,7 @@ end
 ```ruby
 require "track_ballast/uuid_management"
 
-class MyModel < ApplicationModel
+class MyModel < ApplicationRecord
   include TrackBallast::UuidManagement
 end
 ```
