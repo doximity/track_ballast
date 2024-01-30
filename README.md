@@ -22,7 +22,7 @@ Or install it yourself as:
 
 ## Usage
 
-Please see the code and documentation for individual units.  Please `require` and use each unit directly.
+Please see [the code](https://github.com/doximity/track_ballast/tree/master/lib/track_ballast) and [documentation](https://www.rubydoc.info/gems/track_ballast) for individual units.  Please `require` and use each unit directly.
 
 Examples:
 
