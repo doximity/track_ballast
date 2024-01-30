@@ -14,8 +14,8 @@ module TrackBallast
   # == Additional Features
   #
   # - Adds presence validation if the +uuid+ column is non-nullable
-  # - Enforces v4 UUIDs at creation time and logs violations with the
-  #   +invalid-uuid+ tag
+  # - Validates v4 UUIDs at creation time using the +not_v4_uuid+ error on
+  #   +uuid+ and logs violations with a +invalid-uuid+ tag
   #
   # == Usage
   #
