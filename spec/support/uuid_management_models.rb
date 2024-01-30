@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
-class CreateUuidModelsTable < ActiveRecord::Migration[7.1]
+class CreateNullableUuidModelsTable < ActiveRecord::Migration[7.1]
   def change
-    create_table :uuid_models do |table|
-      table.string :uuid
+    create_table :nullable_uuid_models do |table|
+      table.string :uuid, null: true
     end
   end
 end
@@ -16,7 +16,7 @@ class CreateNonNullableUuidModelsTable < ActiveRecord::Migration[7.1]
   end
 end
 
-class UuidModel < ActiveRecord::Base
+class NullableUuidModel < ActiveRecord::Base
   include TrackBallast::UuidManagement
 end
 

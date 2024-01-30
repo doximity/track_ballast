@@ -7,17 +7,17 @@ require "support/uuid_management_models"
 RSpec.describe TrackBallast::UuidManagement do
   before do
     ActiveRecord::Migration.suppress_messages do
-      CreateUuidModelsTable.migrate(:up)
+      CreateNullableUuidModelsTable.migrate(:up)
       CreateNonNullableUuidModelsTable.migrate(:up)
     end
   end
 
   it "generates a UUID after initialization" do
-    expect(UuidModel.new.uuid).to be
+    expect(NullableUuidModel.new.uuid).to be
   end
 
   it "generates a UUID before validation" do
-    model = UuidModel.new
+    model = NullableUuidModel.new
     model.uuid = nil
     expect(model.uuid).not_to be
 
@@ -37,7 +37,7 @@ RSpec.describe TrackBallast::UuidManagement do
   end
 
   it "does not validate UUID presence when the column is nullable" do
-    model = UuidModel.new
+    model = NullableUuidModel.new
     model.uuid = nil
 
     expect(model).to be_valid
@@ -46,14 +46,14 @@ RSpec.describe TrackBallast::UuidManagement do
   it "does not generate a new UUID after initialization" do
     manually_assigned_uuid = SecureRandom.uuid
 
-    model = UuidModel.new(uuid: manually_assigned_uuid)
+    model = NullableUuidModel.new(uuid: manually_assigned_uuid)
 
     expect(model.uuid).to eq(manually_assigned_uuid)
   end
 
   it "does not generate a new UUID before validation" do
     manually_assigned_uuid = SecureRandom.uuid
-    model = UuidModel.new
+    model = NullableUuidModel.new
 
     model.uuid = manually_assigned_uuid
 
@@ -62,13 +62,13 @@ RSpec.describe TrackBallast::UuidManagement do
 
   context "V4-UUIDs" do
     it "is case insensitive when lowercase" do
-      model = UuidModel.create(uuid: SecureRandom.uuid.downcase)
+      model = NullableUuidModel.create(uuid: SecureRandom.uuid.downcase)
 
       expect(model).to be_valid
     end
 
     it "is case insensitive when uppercase" do
-      model = UuidModel.create(uuid: SecureRandom.uuid.upcase)
+      model = NullableUuidModel.create(uuid: SecureRandom.uuid.upcase)
 
       expect(model).to be_valid
     end
@@ -80,7 +80,7 @@ RSpec.describe TrackBallast::UuidManagement do
 
     context "on create" do
       it "raises validation error" do
-        model = UuidModel.create(uuid: v1_uuid)
+        model = NullableUuidModel.create(uuid: v1_uuid)
 
         expect(model.errors).to be_of_kind(:uuid, :not_uuid_v4)
       end
@@ -88,14 +88,14 @@ RSpec.describe TrackBallast::UuidManagement do
       it "logs the error" do
         allow(TrackBallast.logger).to receive(:error)
 
-        UuidModel.create(uuid: v1_uuid)
+        NullableUuidModel.create(uuid: v1_uuid)
 
         expect(TrackBallast.logger)
-          .to have_received(:error).with(hash_including(class: "UuidModel", uuid: v1_uuid))
+          .to have_received(:error).with(hash_including(class: "NullableUuidModel", uuid: v1_uuid))
       end
 
       it "raises validation error if object is newed up and then UUID set to v1" do
-        model = UuidModel.new
+        model = NullableUuidModel.new
         expect(model).to be_valid
 
         model.uuid = v1_uuid
@@ -106,7 +106,7 @@ RSpec.describe TrackBallast::UuidManagement do
 
     context "on update" do
       it "saves the record" do
-        model = UuidModel.new
+        model = NullableUuidModel.new
         model.uuid = v1_uuid
         model.save(validate: false)
 
