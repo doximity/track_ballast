@@ -82,7 +82,7 @@ RSpec.describe TrackBallast::UuidManagement do
       it "adds a validation error" do
         model = NullableUuidModel.create(uuid: v1_uuid)
 
-        expect(model.errors).to be_of_kind(:uuid, :not_uuid_v4)
+        expect(model.errors).to be_of_kind(:uuid, :not_v4_uuid)
       end
 
       it "logs the error" do
