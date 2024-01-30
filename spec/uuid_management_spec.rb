@@ -112,7 +112,8 @@ RSpec.describe TrackBallast::UuidManagement do
 
         UuidModel.create(uuid: v1_uuid)
 
-        expect(TrackBallast.logger).to have_received(:error).with(hash_including(class: "UuidModel", uuid: v1_uuid))
+        expect(TrackBallast.logger).
+          to have_received(:error).with(hash_including(class: "UuidModel", uuid: v1_uuid))
       end
 
       it "raises validation error if object is newed up and then UUID set to v1" do

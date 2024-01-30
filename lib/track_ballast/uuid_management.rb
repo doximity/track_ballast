@@ -31,7 +31,7 @@ module TrackBallast
       return if uuid.match(REGEXP_UUID_V4)
 
       TrackBallast.logger.tagged("invalid-uuid") do |logger|
-        logger.error({ class: self.class.name, uuid: uuid, caller: caller.join("\n") })
+        logger.error(class: self.class.name, uuid: uuid, caller: caller.join("\n"))
       end
 
       errors.add :base, "Only V4 UUIDs are permitted"
