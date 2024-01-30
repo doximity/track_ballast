@@ -20,7 +20,7 @@ module TrackBallast
 
         validate :v4_uuid, on: :create
         with_options unless: :uuid_nullable? do
-          validates :uuid, presence: true, length: { is: 36 }
+          validates :uuid, presence: true, length: {is: 36}
         end
       end
     end

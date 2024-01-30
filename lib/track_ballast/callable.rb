@@ -28,11 +28,11 @@ module TrackBallast
   #
   #     DivideByTwo.call(10) # => 5
   module Callable
-    def call(*args, **kwargs, &block)
+    def call(*, **kwargs, &block)
       if kwargs.present?
-        new(*args, **kwargs).call(&block)
+        new(*, **kwargs).call(&block)
       else
-        new(*args).call(&block)
+        new(*).call(&block)
       end
     end
   end
