@@ -28,6 +28,8 @@ Gem::Specification.new do |spec|
   spec.add_dependency "activerecord", ">= 6.1", "< 8.0"
   spec.add_dependency "activesupport", ">= 6.1", "< 8.0"
   spec.add_development_dependency "bundler"
+  spec.add_development_dependency "guard"
+  spec.add_development_dependency "guard-rspec"
   spec.add_development_dependency "rake"
   spec.add_development_dependency "rspec"
   spec.add_development_dependency "sqlite3"
