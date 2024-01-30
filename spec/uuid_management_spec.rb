@@ -60,26 +60,26 @@ RSpec.describe TrackBallast::UuidManagement do
     expect(model.uuid).to eq(manually_assigned_uuid)
   end
 
-  context "V4-UUIDs" do
-    it "is case insensitive when lowercase" do
+  context "v4 UUIDs" do
+    it "is case-insensitive when lowercase" do
       model = NullableUuidModel.create(uuid: SecureRandom.uuid.downcase)
 
       expect(model).to be_valid
     end
 
-    it "is case insensitive when uppercase" do
+    it "is case-insensitive when uppercase" do
       model = NullableUuidModel.create(uuid: SecureRandom.uuid.upcase)
 
       expect(model).to be_valid
     end
   end
 
-  context "non v4-UUIDs" do
+  context "non-v4 UUIDs" do
     # https://www.uuidgenerator.net/version1
     let(:v1_uuid) { "c48626ce-a3b0-11ec-b909-0242ac120002" }
 
     context "on create" do
-      it "raises validation error" do
+      it "adds a validation error" do
         model = NullableUuidModel.create(uuid: v1_uuid)
 
         expect(model.errors).to be_of_kind(:uuid, :not_uuid_v4)
@@ -94,7 +94,7 @@ RSpec.describe TrackBallast::UuidManagement do
           .to have_received(:error).with(hash_including(class: "NullableUuidModel", uuid: v1_uuid))
       end
 
-      it "raises validation error if object is newed up and then UUID set to v1" do
+      it "adds a validation error if the object is newed up and then UUID set to v1" do
         model = NullableUuidModel.new
         expect(model).to be_valid
 
