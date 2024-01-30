@@ -1,7 +1,15 @@
 # frozen_string_literal: true
 
+require "track_ballast/error"
+
 module TrackBallast
+  # Raised when logging is attempted without a configured logger
+  class NoLoggerError < Error; end
+
   class << self
+    # @!visibility private
+    attr_writer :logger
+
     # Internal logger for +TrackBallast+.
     #
     # This defaults to +Rails.logger+.  This +logger+ method may be removed in
@@ -11,10 +19,15 @@ module TrackBallast
     #
     # @!visibility private
     # @return [ActiveSupport::TaggedLogging] a tagged logger
-    attr_writer :logger
-
     def logger
-      @logger || defined?(Rails) && Rails.logger
+      if @logger
+        @logger
+      elsif defined?(Rails)
+        # This will short-circuit to be `@logger` on future runs
+        @logger = Rails.logger
+      else
+        raise NoLoggerError, "TrackBallast.logger is not configured"
+      end
     end
   end
 end
