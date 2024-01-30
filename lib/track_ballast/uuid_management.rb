@@ -34,7 +34,7 @@ module TrackBallast
         logger.error(class: self.class.name, uuid: uuid, caller: caller.join("\n"))
       end
 
-      errors.add :base, "Only V4 UUIDs are permitted"
+      errors.add :uuid, :not_uuid_v4, message: "is not a V4 UUID"
     end
 
     def uuid_exists?
