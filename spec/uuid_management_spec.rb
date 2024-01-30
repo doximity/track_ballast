@@ -43,7 +43,7 @@ RSpec.describe TrackBallast::UuidManagement do
     model.uuid = nil
     expect(model.uuid).not_to be
 
-    model.valid?
+    model.validate
 
     expect(model.uuid).to be
   end
@@ -85,12 +85,14 @@ RSpec.describe TrackBallast::UuidManagement do
   context "V4-UUIDs" do
     it "is case insensitive when lowercase" do
       model = UuidModel.create(uuid: SecureRandom.uuid.downcase)
-      expect(model.errors.full_messages).to be_empty
+
+      expect(model).to be_valid
     end
 
     it "is case insensitive when uppercase" do
       model = UuidModel.create(uuid: SecureRandom.uuid.upcase)
-      expect(model.errors.full_messages).to be_empty
+
+      expect(model).to be_valid
     end
   end
 
