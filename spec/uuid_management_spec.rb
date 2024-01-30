@@ -55,7 +55,7 @@ RSpec.describe TrackBallast::UuidManagement do
     expect(model).not_to be_valid
   end
 
-  it "does not validate uuid presence when the column is nullable" do
+  it "does not validate UUID presence when the column is nullable" do
     model = UuidModel.new
     model.uuid = nil
 
@@ -70,7 +70,7 @@ RSpec.describe TrackBallast::UuidManagement do
     expect(model.uuid).to eq(manually_assigned_uuid)
   end
 
-  it "does not generate a new uuid before validation" do
+  it "does not generate a new UUID before validation" do
     manually_assigned_uuid = SecureRandom.uuid
     model = UuidModel.new
 
