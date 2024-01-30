@@ -52,7 +52,10 @@ RSpec.describe TrackBallast::UuidManagement do
     model = NonNullableUuidModel.create
     model.uuid = nil
 
-    expect(model).not_to be_valid
+    model.validate
+
+    expect(model.errors).to be_of_kind(:uuid, :blank)
+    expect(model.errors).to be_of_kind(:uuid, :wrong_length)
   end
 
   it "does not validate UUID presence when the column is nullable" do
