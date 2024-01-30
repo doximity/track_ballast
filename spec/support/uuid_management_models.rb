@@ -1,5 +1,8 @@
 # frozen_string_literal: true
 
+require "active_record"
+require "track_ballast/uuid_management"
+
 class CreateNullableUuidModelsTable < ActiveRecord::Migration[7.1]
   def change
     create_table :nullable_uuid_models do |table|

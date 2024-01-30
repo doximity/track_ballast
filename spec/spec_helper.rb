@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require "bundler/setup"
-require "track_ballast"
+require "track_ballast/logger"
 
 require "active_record"
 
