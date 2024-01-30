@@ -22,15 +22,21 @@ Or install it yourself as:
 
 ## Usage
 
-Please see [the code](https://github.com/doximity/track_ballast/tree/master/lib/track_ballast) and [documentation](https://www.rubydoc.info/gems/track_ballast) for individual units.  Please `require` and use each unit directly.
+Please see [the code](https://github.com/doximity/track_ballast/tree/master/lib/track_ballast) and [documentation](https://www.rubydoc.info/gems/track_ballast) for individual units.
 
-Examples:
+You may `require` the entirety of `track_ballast`:
+
+```ruby
+require "track_ballast/all"
+```
+
+...or only require each desired unit:
 
 ```ruby
 require "track_ballast/callable"
 
 class MyService
-  include TrackBallast::Callable
+  extend TrackBallast::Callable
 end
 ```
 
