@@ -139,6 +139,7 @@ DEPENDENCIES
   bundler
   guard
   guard-rspec
+  pry
   rake
   rspec
   sqlite3
