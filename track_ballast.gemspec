@@ -12,6 +12,7 @@ Gem::Specification.new do |spec|
 
   spec.summary = "Small supporting units of Ruby to use with Rails"
   spec.homepage = "https://github.com/doximity/track_ballast"
+  spec.license = "APACHE-2.0"
 
   spec.metadata["homepage_uri"] = spec.homepage
   spec.metadata["source_code_uri"] = spec.homepage
