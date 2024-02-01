@@ -1,3 +1,5 @@
+[![CircleCI](https://dl.circleci.com/status-badge/img/gh/doximity/track_ballast/tree/master.svg?style=svg)](https://dl.circleci.com/status-badge/redirect/gh/doximity/track_ballast/tree/master)
+
 # TrackBallast
 
 TrackBallast contains small supporting units of Ruby to use with Rails.  It is named after [the small supporting stones that you see alongside railway tracks](https://www.scienceabc.com/pure-sciences/why-are-there-stones-train-ballast-alongside-railway-tracks.html).
