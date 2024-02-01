@@ -231,5 +231,5 @@ workflows:
             - '3.3'
             gem-version:
             - rails-6.1.7
-            - rails-7.0.4
+            - rails-7.0.8
             - rails-7.1.3
