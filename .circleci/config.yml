@@ -1,0 +1,234 @@
+---
+version: '2.1'
+
+orbs:
+  ci-utils: doximity/ci-utils@2
+
+executors:
+  base:
+    resource_class: small
+    docker:
+    - image: cimg/base:current-22.04
+  ruby:
+    parameters:
+      ruby-version:
+        type: string
+        default: 3.2.2
+    resource_class: small
+    docker:
+    - image: cimg/ruby:<< parameters.ruby-version >>
+
+commands:
+  bundle_install:
+    steps:
+    - run:
+        name: Configure Bundler
+        command: |
+          bundle config set --local path 'vendor/bundle'
+          bundle config set --local jobs 4
+          bundle config set --local retry 3
+    - run:
+        name: Install Ruby Dependencies
+        command: |
+          if [ -d "vendor/cache" ]; then
+            bundle install --local --verbose
+          else
+            bundle install --verbose
+          fi
+    - run:
+        name: Did you run bundle install after changing Gemfile?
+        command: git diff --exit-code Gemfile.lock
+
+  install_gem_version:
+    parameters:
+      gem-version:
+        description: 'The name and version number (e.g. rails-7.0.3) you want installed, specified to the patch version.'
+        type: string
+        default: ''
+    steps:
+    - when:
+        condition: "<< parameters.gem-version >>"
+        steps:
+        - run:
+            name: Unfreeze Bundle
+            command: bundle config set --local frozen 'false'
+        - run:
+            name: Show prior gem version
+            command: |
+              read -r target_gemname target_version \<<< $( echo "<< parameters.gem-version >>" | sed 's/\(.*\)-\([0-9]\{1,3\}\(\.[0-9]\{1,3\}\)*\)/\1 \2/g')
+              version=$(bundle list | sed -n "s/[[:space:]]*\* $target_gemname (\(.*\))/\1/p")
+              if [[ -z "$version" ]]; then
+                echo "No prior version of ${target_gemname} found."
+              else
+                echo $version;
+              fi
+        - run:
+            name: Set gem version to << parameters.gem-version >>
+            command: |
+              cd
+              read -r target_gemname target_version \<<< $( echo "<< parameters.gem-version >>" | sed 's/\(.*\)-\([0-9]\{1,3\}\(\.[0-9]\{1,3\}\)*\)/\1 \2/g')
+              gem install $target_gemname -i /tmp/repo --no-document -v $target_version
+
+              echo 'Delete any gems matching the newly installed ones from the existing cache'
+              for line in $(ls /tmp/repo/cache | grep gem); do
+                read -r gemname version \<<< $( echo $line | sed 's/\(.*\)-\([0-9]\{1,3\}\(\.[0-9]\{1,3\}\)*\)[^0-9\.]*.*.gem/\1 \2/g')
+                if [ $gemname = 'bundler' ]; # skip bundler
+                  then continue
+                fi
+                rm -f ~/project/vendor/cache/$gemname*.gem
+              done;
+
+              echo 'The following gems will be copied into the project: '
+              ls -l /tmp/repo/cache
+              cp /tmp/repo/cache/*.gem ~/project/vendor/cache
+
+              echo 'Showing gems in the project cache: ls -al ~/project/vendor/cache'
+              ls -al ~/project/vendor/cache
+
+              cd ~/project
+              echo 'Removing Gemfile.lock'
+              rm -f ./Gemfile.lock
+
+              echo 'Fancy replacement. Set all gems in the gemspec to what we currently have in the vendor/cache.'
+              for line in $(ls vendor/cache | grep gem); do
+                # we don't care about the .gem, get rid of it
+                trimmed_line=${line%%.gem}
+                # version to include anything after the gem name so we can pick up prerelease versions
+                read -r gemname version \<<< $( echo $trimmed_line | sed 's/\(.*\)-\([0-9]\{1,3\}\(\.[0-9]\{1,3\}\)*[^0-9\.]*.*\)/\1 \2/g' )
+
+                # leave bundler alone
+                if [ $gemname = 'bundler' ];
+                  then continue
+                fi
+
+                # strip out platform info from version, we just want the number plus any prerelease identifiers
+                version=$(echo $version | cut -d "-" -f 1)
+
+                sed -i "s/\(.*_dependency \"$gemname\"\)".*"/\1, \"~> $version\"/g" *.gemspec
+
+                if [[ "$gemname" = "$target_gemname" ]]; then
+                  if [[ -z "$(sed -n "s/\(.*_dependency \"$gemname\"\).*\"/\1/p" *.gemspec)" ]];
+                  then
+                    echo 'No pre-existing version, adding version';
+                    replacement="spec\\.add_development_dependency \"$gemname\", \"~> $version\""
+                    sed -e "0,/add.*dependency/{/add.*dependency/a\  $replacement" -e "}" -i -- *.gemspec
+                  else
+                    echo 'nothing to do';
+                  fi;
+                fi;
+              done;
+
+              echo 'cat *.gemspec'
+              cat *.gemspec
+
+              echo 'bundle install --local --no-cache'
+              bundle install --local --no-cache
+        - run:
+            name: Gem version after upgrade
+            command: |
+              read -r target_gemname target_version \<<< $( echo "<< parameters.gem-version >>" | sed 's/\(.*\)-\([0-9]\{1,3\}\(\.[0-9]\{1,3\}\)*\)/\1 \2/g')
+              version=$(bundle list | sed -n "s/[[:space:]]*\* $target_gemname (\(.*\))/\1/p")
+              if [[ -z "$version" ]]; then
+                echo "${target_gemname} was somehow not installed."
+                exit 1
+              else
+                echo $version;
+              fi
+
+  run_rspec_tests:
+    parameters:
+      test_pattern:
+        default: "{$(ls -d spec/**/ | tr '\\n' ',' | sed -E 's/(spec\\/|factories|support|\\/|,$)//g' | sed 's/,\\{2,\\}/,/g')}"
+        type: string
+      test_files:
+        default: $(circleci tests glob "spec/$TEST_PATTERN/**/*_spec.rb" | circleci tests split --split-by=timings)
+        type: string
+      profile-specs:
+        type: integer
+        default: 0
+    steps:
+    - run:
+        name: Run RSpec Tests
+        command: |
+          shopt -s globstar
+          OUT_PATH=tmp/test-results
+          mkdir -p $OUT_PATH
+          TEST_PATTERN=<< parameters.test_pattern >>
+          TEST_FILES=<< parameters.test_files >>
+          PROFILE_COUNT=<< parameters.profile-specs >>
+          RSPEC_COMMAND="bundle exec rspec --profile $PROFILE_COUNT --format RspecJunitFormatter --out $OUT_PATH/results.xml --format progress --order defined $TEST_FILES"
+          printf "Executing specs with the following command:\n\n"
+          echo ${RSPEC_COMMAND}
+          printf "\n"
+          eval $RSPEC_COMMAND
+
+jobs:
+  run_tests_ruby:
+    parameters:
+      executor:
+        type: string
+        default: ruby
+      parallelism:
+        type: integer
+        default: 1
+      resource_class:
+        type: string
+        default: small
+      gem-version:
+        description: 'The name and version number (e.g. rails-7.0.3) you want installed,specified to the patch version.'
+        type: string
+        default: ''
+      ruby-version:
+        type: string
+        default: '3.1'
+      pre-actions:
+        description: Steps to perform any necessary setup after dependencies are installed.
+        type: steps
+        default: []
+      actions:
+        description: The actions that fulfill the primary purpose of the CI job (tests/checks/etc.)
+        type: steps
+        default: []
+      post-actions:
+        description: Any artifacting/reporting/cleanup that must occur after the main actions.
+        type: steps
+        default: []
+    executor:
+      name: "<< parameters.executor >>"
+      ruby-version: "<< parameters.ruby-version >>"
+    resource_class: "<< parameters.resource_class >>"
+    parallelism: "<< parameters.parallelism >>"
+    steps:
+    - ci-utils/ci_checkout
+    - bundle_install
+    - install_gem_version:
+        gem-version: "<< parameters.gem-version >>"
+    - steps: "<< parameters.pre-actions >>"
+    - steps: "<< parameters.actions >>"
+    - steps: "<< parameters.post-actions >>"
+    - ci-utils/quietly_store_artifacts
+
+workflows:
+  main:
+    jobs:
+    - run_tests_ruby:
+        name: run_tests_ruby-ruby-<< matrix.ruby-version >>-<< matrix.gem-version>>
+        executor: ruby
+        parallelism: 1
+        actions:
+          - run_rspec_tests:
+              test_files: $(circleci tests glob "spec/**/*_spec.rb" | circleci tests split --split-by=timings)
+        post-actions:
+          - store_test_results:
+              path: tmp/test-results
+        matrix:
+          parameters:
+            ruby-version:
+            - '3.0'
+            - '3.1'
+            - '3.2'
+            - '3.3'
+            gem-version:
+            - rails-6.1.7
+            - rails-7.0.4
+            - rails-7.1.3
