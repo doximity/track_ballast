@@ -3,7 +3,7 @@
 require "active_record"
 require "track_ballast/uuid_management"
 
-class CreateNullableUuidModelsTable < ActiveRecord::Migration[7.1]
+class CreateNullableUuidModelsTable < ActiveRecord::Migration
   def change
     create_table :nullable_uuid_models do |table|
       table.string :uuid, null: true
@@ -11,7 +11,7 @@ class CreateNullableUuidModelsTable < ActiveRecord::Migration[7.1]
   end
 end
 
-class CreateNonNullableUuidModelsTable < ActiveRecord::Migration[7.1]
+class CreateNonNullableUuidModelsTable < ActiveRecord::Migration
   def change
     create_table :non_nullable_uuid_models do |table|
       table.string :uuid, null: false
