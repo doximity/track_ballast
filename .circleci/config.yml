@@ -213,7 +213,7 @@ workflows:
   main:
     jobs:
     - run_tests_ruby:
-        name: << matrix.ruby-version >>-<< matrix.gem-version>>
+        name: ruby-<< matrix.ruby-version >>-<< matrix.gem-version>>
         executor: ruby
         parallelism: 1
         actions:
