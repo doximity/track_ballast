@@ -18,6 +18,7 @@ RSpec.configure do |config|
 
   config.before :suite do
     TrackBallast.logger = ActiveSupport::TaggedLogging.new(Logger.new(StringIO.new))
+    TrackBallast.redis = Redis.new
   end
 
   config.before do
