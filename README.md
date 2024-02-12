@@ -59,6 +59,20 @@ end
 ```
 
 ```ruby
+require "track_ballast/stop_signal"
+
+class MyJob < ApplicationJob
+  extend TrackBallast::StopSignal
+
+  def perform
+    return if self.class.stopped?
+
+    # Process job
+  end
+end
+```
+
+```ruby
 require "track_ballast/uuid_management"
 
 class MyModel < ApplicationRecord
