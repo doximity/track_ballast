@@ -12,14 +12,14 @@ RSpec.describe TrackBallast do
       TrackBallast.redis = original_redis
     end
 
-    it "returns the configured logger" do
+    it "returns the configured Redis" do
       redis = double
       TrackBallast.redis = redis
 
       expect(TrackBallast.redis).to eq(redis)
     end
 
-    it "uses the Rails logger when no logger is configured" do
+    it "uses the REDIS_URL from the environment when no Redis is configured" do
       url = "redis://localhost:6379/1"
       TrackBallast.redis = nil
       expect(ENV["REDIS_URL"]).not_to eq(url)
@@ -28,7 +28,7 @@ RSpec.describe TrackBallast do
       expect(TrackBallast.redis.id).to eq(url)
     end
 
-    it "raises an error when a redis is not configured and REDIS_URL is not present" do
+    it "raises an error when Redis is not configured and REDIS_URL is not present" do
       TrackBallast.redis = nil
       stub_const("ENV", {})
 
