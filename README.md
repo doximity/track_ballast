@@ -22,7 +22,7 @@ Or install it yourself as:
 
     $ gem install track_ballast
 
-If you wish to use features that rely on Redis, please set a Redis connection to `TrackBallast.redis`.
+If you wish to use features that rely on Redis, you may set a Redis connection to `TrackBallast.redis`.
 
 For Rails, you may wish to set up TrackBallast using an initializer, though **please note**, the default configuration may be appropriate.  Please see the `TrackBallast.redis` documentation for details.
 
