@@ -22,6 +22,16 @@ Or install it yourself as:
 
     $ gem install track_ballast
 
+If you wish to use features that rely on Redis, please set a Redis connection to `TrackBallast.redis`.
+
+For Rails, you may wish to set up TrackBallast using an initializer, though **please note**, the default configuration may be appropriate.  Please see the `TrackBallast.redis` documentation for details.
+
+```ruby
+# config/initializers/track_ballast.rb
+
+TrackBallast.redis = Redis.new(url: ENV["CUSTOM_REDIS_URL"])
+```
+
 ## Usage
 
 Please see [the code](https://github.com/doximity/track_ballast/tree/master/lib/track_ballast) and [documentation](https://www.rubydoc.info/gems/track_ballast) for individual units.
@@ -61,6 +71,8 @@ end
 Please see [the Milestones on GitHub](https://github.com/doximity/track_ballast/milestones?direction=asc&sort=title&state=open).
 
 ## Development
+
+You'll need [Redis](https://redis.io/docs/getting-started/) and [Ruby](https://www.ruby-lang.org/en/downloads/) installed.  Please ensure both are set up before continuing.
 
 After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake spec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
 
