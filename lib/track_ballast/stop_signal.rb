@@ -70,6 +70,7 @@ module TrackBallast
   #     class YourModel < ApplicationRecord
   #       include TrackBallast::StopSignal
   #
+  #       # Optional, but recommended for usage via `include`
   #       def stop_signal_key
   #         "#{self.class.name}:#{id}:stop"
   #       end
