@@ -16,7 +16,10 @@ executors:
         default: 3.2.2
     resource_class: small
     docker:
-    - image: cimg/ruby:<< parameters.ruby-version >>
+      - image: cimg/ruby:<< parameters.ruby-version >>
+        environment:
+          REDIS_URL: redis://localhost:6379
+          BUNDLE_VERSION: 2.5.5
 
   ruby-with-services:
     parameters:
