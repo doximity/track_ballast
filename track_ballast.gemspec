@@ -29,6 +29,7 @@ Gem::Specification.new do |spec|
 
   spec.add_dependency "activerecord", ">= 6.1", "< 8.0"
   spec.add_dependency "activesupport", ">= 6.1", "< 8.0"
+  spec.add_dependency "redis", ">= 4.8", "< 6.0"
   spec.add_development_dependency "bundler"
   spec.add_development_dependency "guard"
   spec.add_development_dependency "guard-rspec"
