@@ -120,10 +120,9 @@ RSpec.describe TrackBallast::StopSignal do
 
       allow(TrackBallast.redis).to receive(:set).and_raise(Redis::CommandError)
 
-      expect { fake_job.stop! }
-        .to raise_error(TrackBallast::StopSignalError) do |error|
-          expect(error.cause).to be_kind_of(Redis::CommandError)
-        end
+      expect { fake_job.stop! }.to raise_error(TrackBallast::StopSignalError) do |error|
+        expect(error.cause).to be_kind_of(Redis::CommandError)
+      end
     end
 
     it "raises a wrapped error when an error occurs while removing the stop signal" do
@@ -133,10 +132,9 @@ RSpec.describe TrackBallast::StopSignal do
 
       allow(TrackBallast.redis).to receive(:del).and_raise(Redis::CommandError)
 
-      expect { fake_job.go! }
-        .to raise_error(TrackBallast::StopSignalError) do |error|
-          expect(error.cause).to be_kind_of(Redis::CommandError)
-        end
+      expect { fake_job.go! }.to raise_error(TrackBallast::StopSignalError) do |error|
+        expect(error.cause).to be_kind_of(Redis::CommandError)
+      end
     end
 
     it "raises a wrapped error when an error occurs while checking the stop signal" do
@@ -146,10 +144,9 @@ RSpec.describe TrackBallast::StopSignal do
 
       allow(TrackBallast.redis).to receive(:exists).and_raise(Redis::CommandError)
 
-      expect { fake_job.stopped? }
-        .to raise_error(TrackBallast::StopSignalError) do |error|
-          expect(error.cause).to be_kind_of(Redis::CommandError)
-        end
+      expect { fake_job.stopped? }.to raise_error(TrackBallast::StopSignalError) do |error|
+        expect(error.cause).to be_kind_of(Redis::CommandError)
+      end
     end
   end
 end
