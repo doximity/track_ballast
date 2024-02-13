@@ -98,7 +98,7 @@ find spec -name '*_spec.rb' -exec bundle exec rspec {} \;
 
 ## Contributing
 
-1. See [CONTRIBUTING.md](./CONTRIBUTING.md)
+1. See [CONTRIBUTING.md](https://github.com/doximity/track_ballast/blob/master/CONTRIBUTING.md)
 2. Fork it ( https://github.com/doximity/track_ballast/fork )
 3. Create your feature branch (`git checkout -b my-new-feature`)
 4. Commit your changes (`git commit -am 'Add some feature'`)
