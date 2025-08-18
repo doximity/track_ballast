@@ -1,6 +1,11 @@
 Changelog
 =========
 
+## 0.3.0
+
+* Added support for Rails 8
+* Updated ActiveRecord and ActiveSupport dependencies to support Rails 6.1 - 8.x
+
 ## 0.2.0
 
 * Added `redis` dependency
