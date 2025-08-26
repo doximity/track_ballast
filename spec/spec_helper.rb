@@ -3,6 +3,7 @@
 require "bundler/setup"
 require "track_ballast/logger"
 
+require "logger"
 require "active_record"
 
 RSpec.configure do |config|

@@ -27,8 +27,8 @@ Gem::Specification.new do |spec|
   spec.executables = []
   spec.require_paths = ["lib"]
 
-  spec.add_dependency "activerecord", ">= 6.1", "< 8.0"
-  spec.add_dependency "activesupport", ">= 6.1", "< 8.0"
+  spec.add_dependency "activerecord", ">= 7.0", "< 9.0"
+  spec.add_dependency "activesupport", ">= 7.0", "< 9.0"
   spec.add_dependency "redis", ">= 4.8", "< 6.0"
   spec.add_development_dependency "bundler"
   spec.add_development_dependency "guard"
