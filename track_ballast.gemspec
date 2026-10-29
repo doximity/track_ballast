@@ -29,6 +29,7 @@ Gem::Specification.new do |spec|
 
   spec.add_dependency "activerecord", ">= 7.0", "< 9.0"
   spec.add_dependency "activesupport", ">= 7.0", "< 9.0"
+  spec.add_dependency "ostruct"
   spec.add_dependency "redis", ">= 4.8", "< 6.0"
   spec.add_development_dependency "bundler"
   spec.add_development_dependency "guard"

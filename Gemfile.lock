@@ -4,6 +4,7 @@ PATH
     track_ballast (0.3.0)
       activerecord (>= 7.0, < 9.0)
       activesupport (>= 7.0, < 9.0)
+      ostruct
       redis (>= 4.8, < 6.0)
 
 GEM
@@ -64,15 +65,19 @@ GEM
     logger (1.7.0)
     lumberjack (1.2.9)
     method_source (1.0.0)
-    minitest (5.20.0)
+    minitest (6.0.6)
+      drb (~> 2.0)
+      prism (~> 1.5)
     nenv (0.3.0)
     notiffany (0.1.3)
       nenv (~> 0.1)
       shellany (~> 0.0)
+    ostruct (0.6.3)
     parallel (1.24.0)
     parser (3.3.0.5)
       ast (~> 2.4.1)
       racc
+    prism (1.9.0)
     pry (0.14.2)
       coderay (~> 1.1)
       method_source (~> 1.0)
@@ -149,6 +154,7 @@ PLATFORMS
   arm64-darwin-21
   arm64-darwin-22
   arm64-darwin-24
+  arm64-darwin-25
   x86_64-linux
 
 DEPENDENCIES
@@ -165,4 +171,4 @@ DEPENDENCIES
   yard
 
 BUNDLED WITH
-   2.4.10
+  4.0.23
